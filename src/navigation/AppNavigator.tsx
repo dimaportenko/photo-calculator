@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { CameraScreen } from "../CameraScreen";
+import { CameraScreen } from "../screens/CameraScreen";
 
 import * as routes from "./routes";
 
