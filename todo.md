@@ -1,6 +1,6 @@
 # Next stpes todo
 
-- [ ] add icon 
-- [ ] splash image
-- [ ] add navigation library
+- [x] add icon 
+- [x] splash image
+- [x] add navigation library
 - [ ] add camera library
