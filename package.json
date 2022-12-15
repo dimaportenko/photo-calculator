@@ -1,18 +1,23 @@
 {
   "name": "photo-calculator",
   "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npx expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "npx expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
+    "ios:dev": "eas build --profile development --platform ios",
+    "ios:device": "npx expo run:ios -d",
+    "prebuild": "npx expo prebuild",
     "web": "expo start --web"
   },
   "dependencies": {
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
-    "expo": "~47.0.6",
+    "expo": "~47.0.8",
+    "expo-dev-client": "~2.0.1",
+    "expo-splash-screen": "~0.17.5",
     "expo-status-bar": "~1.4.2",
+    "expo-system-ui": "~2.0.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",

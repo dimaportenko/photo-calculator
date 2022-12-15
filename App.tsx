@@ -1,3 +1,5 @@
+import "expo-dev-client";
+
 import React from "react";
 import { AppContainer } from "./src/AppContainer";
 
