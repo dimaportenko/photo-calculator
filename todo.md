@@ -2,8 +2,8 @@
 
 - [x] add git
 - [x] convert to the typescript
-- [ ] new architecture
-- [ ] add typescript pathes
+- [x] new architecture
+- [x] add typescript pathes
 - [x] prettier config
-- [ ] navigation
-- [ ] nativewind 
+- [ ] navigation (expo router v3)
+- [ ] nativewind (v4 if possible)
