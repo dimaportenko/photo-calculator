@@ -2,6 +2,9 @@
   "commands": {
     "expo:start": "yarn start",
     "ts:check": "yarn tsc",
-    "lint": "yarn lint"
+    "lint": "yarn lint",
+    "prebuild": "npx expo prebuild --clean",
+    "run:ios": "npx expo run:ios",
+    "eas:ios": "eas build -p ios"
   }
 }
