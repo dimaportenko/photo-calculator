@@ -5,5 +5,7 @@
 - [x] new architecture
 - [x] add typescript pathes
 - [x] prettier config
-- [ ] navigation (expo router v3)
-- [ ] nativewind (v4 if possible)
+- [x] navigation (expo router v3)
+- [x] nativewind (v4 if possible)
+
+- [ ] test on android
