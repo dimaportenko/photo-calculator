@@ -1,6 +1,7 @@
 {
   "commands": {
     "expo:start": "yarn start",
-    "ts:check": "yarn tsc"
+    "ts:check": "yarn tsc",
+    "lint": "yarn lint"
   }
 }

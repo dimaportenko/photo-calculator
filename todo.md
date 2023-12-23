@@ -4,6 +4,6 @@
 - [x] convert to the typescript
 - [ ] new architecture
 - [ ] add typescript pathes
-- [ ] prettier config
+- [x] prettier config
 - [ ] navigation
 - [ ] nativewind 
