@@ -8,6 +8,7 @@
     "run:ios": "npx expo run:ios",
     "run:android": "npx expo run:android",
     "eas:ios": "eas build -p ios",
-    "expo:install": "npx expo install"
+    "expo:install": "npx expo install",
+    "pod install": "pod install --project-directory=ios"
   }
 }
