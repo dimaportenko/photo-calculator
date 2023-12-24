@@ -1,9 +1,17 @@
-import { Pressable, Text } from "react-native";
+import { PropsWithChildren } from "react";
+import { Pressable } from "react-native";
 
-export const Button = () => {
+type Props = PropsWithChildren<{
+  onPress: () => void;
+}>;
+
+export const Button = ({ onPress, children }: Props) => {
   return (
-    <Pressable onPress={() => alert("Button pressed")}>
-      <Text className="text-[18px] pt-4 text-blue-500">Test</Text>
+    <Pressable
+      className="p-4 rounded-full bg-blue-500 active:bg-blue-400"
+      onPress={onPress}
+    >
+      {children}
     </Pressable>
   );
 };
