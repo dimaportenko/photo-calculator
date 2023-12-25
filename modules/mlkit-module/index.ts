@@ -7,7 +7,7 @@ import MLKitModuleView from './src/MLKitModuleView';
 import { ChangeEventPayload, MLKitModuleViewProps } from './src/MLKitModule.types';
 
 // Get the native constant value.
-export const PI = MLKitModule.PI;
+export const PI: number = MLKitModule.PI;
 
 export function hello(): string {
   return MLKitModule.hello();
@@ -15,6 +15,10 @@ export function hello(): string {
 
 export async function setValueAsync(value: string) {
   return await MLKitModule.setValueAsync(value);
+}
+
+export async function process(imgSrc: string): Promise<string> {
+  return await MLKitModule.process(imgSrc);
 }
 
 const emitter = new EventEmitter(MLKitModule ?? NativeModulesProxy.MLKitModule);
