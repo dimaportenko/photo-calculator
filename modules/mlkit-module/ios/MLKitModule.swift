@@ -1,4 +1,6 @@
 import ExpoModulesCore
+import MLKitTextRecognition
+import MLKitVision
 
 public class MLKitModule: Module {
     // Each module class must implement the definition function. The definition consists of components
@@ -33,15 +35,53 @@ public class MLKitModule: Module {
         }
 
         AsyncFunction("process") { (imgSrc: String) in
-            "imgSrc: " + imgSrc
-        }
+            guard let url = URL(string: imgSrc) else {
+                throw NSError(domain: "", code: 200, userInfo: nil)
+            }
 
+            let task = URLSession.shared.dataTask(with: url) { data, _, error in
+                if let error = error {
+                    print("Error: \(error)")
+                } else if let data = data {
+                    let image = UIImage(data: data)
+                    // Use the image
+                    self.recognizeFromImage(image: image!)
+                }
+            }
+
+            task.resume()
+        }
         // Enables the module to be used as a native view. Definition components that are accepted as part of the
         // view definition: Prop, Events.
         View(MLKitModuleView.self) {
             // Defines a setter for the `name` prop.
             Prop("name") { (_: MLKitModuleView, prop: String) in
                 print(prop)
+            }
+        }
+    }
+
+    public func recognizeFromImage(image: UIImage) {
+        let latinOptions = TextRecognizerOptions()
+        let textRecognizer = TextRecognizer.textRecognizer(options: latinOptions)
+        let visionImage = VisionImage(image: image)
+
+        textRecognizer.process(visionImage) { result, error in
+            guard error == nil, let result = result else {
+                // Error handling
+                return
+            }
+
+            // Recognized text
+            for block in result.blocks {
+                let blockText = block.text
+                for line in block.lines {
+                    let lineText = line.text
+                    for element in line.elements {
+                        let elementText = element.text
+                        print(elementText)
+                    }
+                }
             }
         }
     }

@@ -6,6 +6,7 @@
     "lint": "yarn lint",
     "prebuild": "npx expo prebuild --clean",
     "run:ios": "npx expo run:ios",
+    "run:ios:xr": "npx expo run:ios -d 00008020-001469393479002E",
     "run:android": "npx expo run:android",
     "eas:ios": "eas build -p ios",
     "expo:install": "npx expo install",
