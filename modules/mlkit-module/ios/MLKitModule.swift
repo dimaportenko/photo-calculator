@@ -35,25 +35,25 @@ public class MLKitModule: Module {
         }
 
         AsyncFunction("process") { (imgSrc: String, promise: Promise) in
-                guard let url = URL(string: imgSrc) else {
-                    throw NSError(domain: "", code: 200, userInfo: nil)
-                }
-
-                let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-                    if let error = error {
-                        promise.reject(error)
-                    } else if let data = data, let image = UIImage(data: data) {
-                        self?.recognizeFromImage(image: image, completion: { result, error in
-                            if let error = error {
-                                promise.reject(error)
-                            } else if let result = result {
-                                promise.resolve(result)
-                            }
-                        })
-                    }
-                }
-                task.resume()
+            guard let url = URL(string: imgSrc) else {
+                throw NSError(domain: "", code: 200, userInfo: nil)
             }
+
+            let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+                if let error = error {
+                    promise.reject(error)
+                } else if let data = data, let image = UIImage(data: data) {
+                    self?.recognizeFromImage(image: image, completion: { result, error in
+                        if let error = error {
+                            promise.reject(error)
+                        } else if let result = result {
+                            promise.resolve(result)
+                        }
+                    })
+                }
+            }
+            task.resume()
+        }
 
         // Enables the module to be used as a native view. Definition components that are accepted as part of the
         // view definition: Prop, Events.
@@ -66,38 +66,38 @@ public class MLKitModule: Module {
     }
 
     public func recognizeFromImage(image: UIImage, completion: @escaping ([String: Any]?, Error?) -> Void) {
-            let latinOptions = TextRecognizerOptions()
-            let textRecognizer = TextRecognizer.textRecognizer(options: latinOptions)
-            let visionImage = VisionImage(image: image)
+        let latinOptions = TextRecognizerOptions()
+        let textRecognizer = TextRecognizer.textRecognizer(options: latinOptions)
+        let visionImage = VisionImage(image: image)
 
-            textRecognizer.process(visionImage) { result, error in
-                if let error = error {
-                    completion(nil, error)
-                } else if let result = result {
-                    let imageWidth = image.size.width
-                    let imageHeight = image.size.height
-                    var blocksData = [Any]()
+        textRecognizer.process(visionImage) { result, error in
+            if let error = error {
+                completion(nil, error)
+            } else if let result = result {
+                let imageWidth = image.size.width
+                let imageHeight = image.size.height
+                var blocksData = [Any]()
 
-                    for block in result.blocks {
-                        let frame = block.frame
-                        let blockData: [String: Any] = [
-                            "text": block.text,
-                            "x": frame.origin.x / imageWidth,
-                            "y": frame.origin.y / imageHeight,
-                            "width": frame.width / imageWidth,
-                            "height": frame.height / imageHeight
-                        ]
-                        blocksData.append(blockData)
-                    }
-
-                    let resultData: [String: Any] = [
-                        "width": imageWidth,
-                        "height": imageHeight,
-                        "blocks": blocksData
+                for block in result.blocks {
+                    let frame = block.frame
+                    let blockData: [String: Any] = [
+                        "text": block.text,
+                        "x": frame.origin.x / imageWidth,
+                        "y": frame.origin.y / imageHeight,
+                        "width": frame.width / imageWidth,
+                        "height": frame.height / imageHeight,
                     ]
-                    
-                    completion(resultData, nil)
+                    blocksData.append(blockData)
                 }
+
+                let resultData: [String: Any] = [
+                    "width": imageWidth,
+                    "height": imageHeight,
+                    "blocks": blocksData,
+                ]
+
+                completion(resultData, nil)
             }
         }
+    }
 }
