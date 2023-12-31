@@ -34,23 +34,27 @@ public class MLKitModule: Module {
             ])
         }
 
-        AsyncFunction("process") { (imgSrc: String) in
-            guard let url = URL(string: imgSrc) else {
-                throw NSError(domain: "", code: 200, userInfo: nil)
-            }
-
-            let task = URLSession.shared.dataTask(with: url) { data, _, error in
-                if let error = error {
-                    print("Error: \(error)")
-                } else if let data = data {
-                    let image = UIImage(data: data)
-                    // Use the image
-                    self.recognizeFromImage(image: image!)
+        AsyncFunction("process") { (imgSrc: String, promise: Promise) in
+                guard let url = URL(string: imgSrc) else {
+                    throw NSError(domain: "", code: 200, userInfo: nil)
                 }
+
+                let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
+                    if let error = error {
+                        promise.reject(error)
+                    } else if let data = data, let image = UIImage(data: data) {
+                        self?.recognizeFromImage(image: image, completion: { result, error in
+                            if let error = error {
+                                promise.reject(error)
+                            } else if let result = result {
+                                promise.resolve(result)
+                            }
+                        })
+                    }
+                }
+                task.resume()
             }
 
-            task.resume()
-        }
         // Enables the module to be used as a native view. Definition components that are accepted as part of the
         // view definition: Prop, Events.
         View(MLKitModuleView.self) {
@@ -61,28 +65,39 @@ public class MLKitModule: Module {
         }
     }
 
-    public func recognizeFromImage(image: UIImage) {
-        let latinOptions = TextRecognizerOptions()
-        let textRecognizer = TextRecognizer.textRecognizer(options: latinOptions)
-        let visionImage = VisionImage(image: image)
+    public func recognizeFromImage(image: UIImage, completion: @escaping ([String: Any]?, Error?) -> Void) {
+            let latinOptions = TextRecognizerOptions()
+            let textRecognizer = TextRecognizer.textRecognizer(options: latinOptions)
+            let visionImage = VisionImage(image: image)
 
-        textRecognizer.process(visionImage) { result, error in
-            guard error == nil, let result = result else {
-                // Error handling
-                return
-            }
+            textRecognizer.process(visionImage) { result, error in
+                if let error = error {
+                    completion(nil, error)
+                } else if let result = result {
+                    let imageWidth = image.size.width
+                    let imageHeight = image.size.height
+                    var blocksData = [Any]()
 
-            // Recognized text
-            for block in result.blocks {
-                let blockText = block.text
-                for line in block.lines {
-                    let lineText = line.text
-                    for element in line.elements {
-                        let elementText = element.text
-                        print(elementText)
+                    for block in result.blocks {
+                        let frame = block.frame
+                        let blockData: [String: Any] = [
+                            "text": block.text,
+                            "x": frame.origin.x / imageWidth,
+                            "y": frame.origin.y / imageHeight,
+                            "width": frame.width / imageWidth,
+                            "height": frame.height / imageHeight
+                        ]
+                        blocksData.append(blockData)
                     }
+
+                    let resultData: [String: Any] = [
+                        "width": imageWidth,
+                        "height": imageHeight,
+                        "blocks": blocksData
+                    ]
+                    
+                    completion(resultData, nil)
                 }
             }
         }
-    }
 }
