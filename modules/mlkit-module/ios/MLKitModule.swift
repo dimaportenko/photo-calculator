@@ -25,15 +25,6 @@ public class MLKitModule: Module {
             "Hello world! 👋"
         }
 
-        // Defines a JavaScript function that always returns a Promise and whose native code
-        // is by default dispatched on the different thread than the JavaScript runtime runs on.
-        AsyncFunction("setValueAsync") { (value: String) in
-            // Send an event to JavaScript.
-            self.sendEvent("onChange", [
-                "value": value,
-            ])
-        }
-
         AsyncFunction("process") { (imgSrc: String, promise: Promise) in
             guard let url = URL(string: imgSrc) else {
                 throw NSError(domain: "", code: 200, userInfo: nil)

@@ -59,7 +59,7 @@ android {
   }
 
   kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.majorVersion
+    jvmTarget = JavaVersion.VERSION_17.majorVersion
   }
 
   namespace "expo.dimaportenko.mlkitmodule"

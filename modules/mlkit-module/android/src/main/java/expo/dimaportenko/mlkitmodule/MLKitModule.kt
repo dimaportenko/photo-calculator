@@ -1,5 +1,7 @@
 package expo.dimaportenko.mlkitmodule
 
+import expo.modules.kotlin.Promise
+import expo.modules.kotlin.exception.CodedException
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 
@@ -28,11 +30,10 @@ class MLKitModule : Module() {
 
     // Defines a JavaScript function that always returns a Promise and whose native code
     // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
+    AsyncFunction("process") { imgSrc: String, promise: Promise ->
       // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
+
+         promise.reject(CodedException("ERR_IMAGE_PROCESSING"))
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of

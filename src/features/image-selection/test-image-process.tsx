@@ -27,9 +27,13 @@ export const TestImageProcess = () => {
     const img = Image.resolveAssetSource(imageSource);
     console.log("test process", img);
 
-    const response = await process(img.uri);
-    setResult(response);
-    console.log("response", response);
+    try {
+      const response = await process(img.uri);
+      setResult(response);
+      console.log("response", response);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   useEffect(() => {
