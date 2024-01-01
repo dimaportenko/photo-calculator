@@ -1,6 +1,6 @@
 import { ProcessResult, process } from "mlkit-module";
 import { useEffect, useState } from "react";
-import { View, Text, Image, useWindowDimensions } from "react-native";
+import { View, Text, Image, useWindowDimensions, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Button } from "@/components/Button";
@@ -64,10 +64,19 @@ export const TestImageProcess = () => {
   }, [imageRenderRect, result]);
 
   return (
-    <View className="flex-1" style={{ paddingTop: top, paddingBottom: bottom }}>
+    <View
+      className="flex-1"
+      style={{
+        paddingTop: Platform.select({
+          ios: top,
+          android: 0,
+        }),
+        paddingBottom: bottom,
+      }}
+    >
       <View className="flex-1">
         <Image
-          className="h-full w-full"
+          className="h-full w-full "
           resizeMode="contain"
           source={imageSource}
           onLayout={(event) => {
@@ -86,9 +95,10 @@ export const TestImageProcess = () => {
 
       {result && (
         <View className="absolute w-full h-full" style={{ bottom }}>
-          {result.blocks.map((block) => {
+          {result.blocks.map((block, index) => {
             return (
               <View
+                key={index}
                 className="absolute border border-red-500"
                 style={{
                   top: block.y * imageActualRect.height + imageActualRect.y,

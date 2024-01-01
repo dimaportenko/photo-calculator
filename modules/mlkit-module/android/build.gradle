@@ -86,4 +86,7 @@ repositories {
 dependencies {
   implementation project(':expo-modules-core')
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${getKotlinVersion()}"
+
+  // To recognize Latin script
+  implementation 'com.google.android.gms:play-services-mlkit-text-recognition:19.0.0'
 }
